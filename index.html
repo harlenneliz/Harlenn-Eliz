@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Harlenn Eliz | Portafolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --bg-dark: #121212;
+      --text-light: #333333;
+      --text-dark: #dddddd;
+      --primary: #0077ff;
+      --card-bg-light: #f5f5f5;
+      --card-bg-dark: #1e1e1e;
+      --btn-hover-scale: 1.1;
+      --btn-transition: 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--bg-light);
+      border-bottom: 1px solid #ccc;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    body.dark header {
+      background: var(--bg-dark);
+      border-color: #333;
+    }
+
+    nav a, nav button.theme-toggle {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: transform var(--btn-transition), color var(--btn-transition);
+      outline: none;
+      border: none;
+      background: none;
+      font-size: 1rem;
+    }
+
+    /* Animación botones menú al hacer hover */
+    nav a:hover,
+    nav a:focus {
+      color: var(--primary);
+      transform: scale(var(--btn-hover-scale));
+    }
+
+    nav button.theme-toggle:hover,
+    nav button.theme-toggle:focus {
+      transform: scale(var(--btn-hover-scale));
+      color: var(--primary);
+    }
+
+    .theme-toggle {
+      font-size: 1.2rem;
+      padding: 0.4rem;
+      color: inherit;
+      transition: transform 0.2s;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    section {
+      padding: 100px 20px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      min-height: 100vh;
+      flex-wrap: wrap;
+    }
+
+    .hero img {
+      width: 320px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .hero-preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .hero-preview iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .hero-preview .sobre-mi {
+      background: var(--card-bg-light);
+      padding: 15px 20px;
+      border-radius: 10px;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    body.dark .hero-preview .sobre-mi {
+      background: var(--card-bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Mosaico compacto para portafolio */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px;
+      grid-auto-rows: 150px;
+    }
+
+    .portfolio-item {
+      background: var(--card-bg-light);
+      border-radius: 10px;
+      padding: 5px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      user-select: none;
+      display: block;
+      /* grid-row-end se ajustará por JS para efecto masonry */
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+
+    .portfolio-item:hover,
+    .portfolio-item:focus-visible {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      outline: none;
+    }
+
+    .portfolio-item:hover img,
+    .portfolio-item:focus-visible img {
+      transform: scale(1.1);
+    }
+
+    body.dark .portfolio-item {
+      background: var(--card-bg-dark);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: var(--card-bg-light);
+    }
+
+    body.dark footer {
+      background: var(--card-bg-dark);
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 1.2rem;
+    }
+
+    /* Logo */
+    #logo-img {
+      height: 40px;
+      transition: filter 0.3s ease;
+    }
+
+    /* WhatsApp icon en contacto */
+    .whatsapp-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: #25d366;
+      text-decoration: none;
+    }
+
+    .whatsapp-link i {
+      font-size: 1.4rem;
+    }
+
+    /* Aumentar tamaño iframe en sección agencia */
+    #agencia iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <img id="logo-img" src="img/logo-black.png" alt="Logo" />
+      <strong>Harlenn Eliz</strong>
+    </div>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#portafolio">Portafolio</a>
+      <a href="#agencia">Dione Model Agency</a>
+      <a href="#contacto-directo">Contacto</a>
+      <button class="theme-toggle" aria-label="Cambiar tema"><i class="fa-regular fa-moon"></i></button>
+    </nav>
+  </header>
+
+  <section id="inicio" class="hero">
+    <img src="img/tu-foto.jpg" alt="Harlenn Eliz" />
+    <div class="hero-preview">
+      <h1>Harlenn Eliz</h1>
+      <p>Fotógrafo | Filmmaker | Diseñador | Productor</p>
+
+      <div class="sobre-mi">
+        <h2>Sobre mí</h2>
+        <p>Soy un apasionado del arte visual que busca capturar momentos auténticos con un enfoque profesional y artístico.</p>
+      </div>
+
+      <iframe src="https://www.instagram.com/harlenn_eliz/embed" title="Instagram Preview"></iframe>
+      <iframe src="https://www.tiktok.com/embed/@harlenn_eliz" title="TikTok Preview"></iframe>
+    </div>
+  </section>
+
+  <section id="portafolio">
+    <h2>Portafolio</h2>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-item" tabindex="0" role="button" aria-pressed="false" onclick="openGallery('galeria-xv.html', event)" onkeypress="if(event.key==='Enter'){openGallery('galeria-xv.html', event)}">
+        <img src="img/xv1.jpg" alt="XV 1" />
+      </div>
+
+      <div class="portfolio-item" tabindex="0" role="button" aria-pressed="false" onclick="openGallery('galeria-bodas.html', event)" onkeypress="if(event.key==='Enter'){openGallery('galeria-bodas.html', event)}">
+        <img src="img/boda1.jpg" alt="Boda 1" />
+      </div>
+
+      <div class="portfolio-item" tabindex="0" role="button" aria-pressed="false" onclick="openGallery('galeria-moda.html', event)" onkeypress="if(event.key==='Enter'){openGallery('galeria-moda.html', event)}">
+        <img src="img/moda1.jpg" alt="Moda 1" />
+      </div>
+
+      <div class="portfolio-item" tabindex="0" role="button" aria-pressed="false" onclick="openGallery('galeria-comercial.html', event)" onkeypress="if(event.key==='Enter'){openGallery('galeria-comercial.html', event)}">
+        <img src="img/comercial1.jpg" alt="Fotografía Comercial 1" />
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto-directo">
+    <h2>Reservaciones / Contacto Directo</h2>
+    <p>¿Quieres reservar una fecha para sesión o proyecto? Rellena el formulario:</p>
+    <form action="mailto:harlenneliz@gmail.com" method="POST" enctype="text/plain" style="max-width: 600px; margin-top: 20px;">
+      <label for="nombre">Nombre:</label><br />
+      <input
+        type="text"
+        id="nombre"
+        name="nombre"
+        required
+        style="width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 8px; border: 1px solid #ccc; background-color: transparent; color: inherit;"
+      /><br />
+
+      <label for="email">Correo:</label><br />
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        style="width: 100%; padding: 10px; margin: 5px 0 15px; border-radius: 8px; border: 1px solid #ccc; background-color: transparent; color: inherit;"
+      /><br />
+
+      <label for="mensaje">Mensaje:</label><br />
+      <textarea
+        id="mensaje"
+        name="mensaje"
+        rows="5"
+        required
+        style="width: 100%; padding: 10px; margin: 5px 0 20px; border-radius: 8px; border: 1px solid #ccc; background-color: transparent; color: inherit;"
+      ></textarea
+      ><br />
+
+      <button
+        type="submit"
+        style="padding: 10px 20px; background-color: #0077ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;"
+      >
+        Enviar
+      </button>
+    </form>
+    <p style="margin-top: 20px;">
+      O contáctame directamente vía WhatsApp:
+      <a href="https://wa.me/50241382843" target="_blank" class="whatsapp-link"
+        ><i class="fab fa-whatsapp"></i> +502 4138 2843</a
+      >
+    </p>
+  </section>
+
+  <section id="agencia">
+    <h2>Dione Model Agency</h2>
+    <p>Explora nuestros proyectos, campañas y servicios visuales como agencia creativa.</p>
+    <iframe
+      src="https://www.instagram.com/dione_agency_/embed"
+      title="Dione Agency Instagram"
+    ></iframe>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Harlenn Eliz</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/harlenn_eliz/" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@harlenn_eliz" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.facebook.com/hfranckeliz?locale=es_LA" target="_blank"><i class="fab fa-facebook"></i></a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    });
+    document.querySelectorAll('section').forEach((section) => {
+      observer.observe(section);
+    });
+
+    const toggle = document.querySelector('.theme-toggle');
+    const icon = toggle.querySelector('i');
+    const logoImg = document.getElementById('logo-img');
+
+    toggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+
+      if (document.body.classList.contains('dark')) {
+        logoImg.src = 'img/logo-white.png';
+      } else {
+        logoImg.src = 'img/logo-black.png';
+      }
+    });
+
+    // Función para abrir galería con animación
+    function openGallery(url, event) {
+      const activeItem = event.currentTarget;
+      activeItem.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      activeItem.style.transform = 'scale(0.95)';
+      activeItem.style.opacity = '0.6';
+
+      setTimeout(() => {
+        window.location.href = url;
+      }, 300);
+    }
+
+    // Ajustar grid-row-end para efecto masonry en portafolio
+    function resizeGridItems() {
+      const grid = document.querySelector('.portfolio-grid');
+      const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+      const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('gap'));
+      grid.querySelectorAll('.portfolio-item').forEach(item => {
+        const img = item.querySelector('img');
+        if (img.complete) {
+          const rowSpan = Math.ceil((img.getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+          item.style.gridRowEnd = `span ${rowSpan}`;
+        } else {
+          img.onload = () => {
+            const rowSpan = Math.ceil((img.getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+            item.style.gridRowEnd = `span ${rowSpan}`;
+          }
+        }
+      });
+    }
+    window.addEventListener('load', resizeGridItems);
+    window.addEventListener('resize', resizeGridItems);
+  </script>
+</body>
+</html>
